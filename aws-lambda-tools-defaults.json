@@ -11,7 +11,7 @@
     "configuration" : "Release",
     "function-runtime" : "dotnet6",
     "function-memory-size" : 512,
-    "function-timeout"     : 15,
+    "function-timeout"     : 30,
     "function-handler"     : "otel_dotnet_lambda_sample::otel_dotnet_lambda_sample.Function::FunctionHandler",
     "framework"            : "net6.0",
     "function-name"        : "otel_dotnet_lambda_sample",

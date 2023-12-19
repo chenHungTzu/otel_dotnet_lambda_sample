@@ -54,7 +54,7 @@ public class Function
                 .AddSource(TraceKey)
                 .AddAWSInstrumentation()
                 .AddOtlpExporter()
-                .AddAWSLambdaConfigurations(options => options.DisableAwsXRayContextExtraction = true)
+                .AddAWSLambdaConfigurations()
                 .AddXRayExporter()
                 .Build();
     }
@@ -67,17 +67,17 @@ public class Function
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public string FunctionHandler(JObject input, ILambdaContext context)
+    public async Task<string> FunctionHandler(JObject? input, ILambdaContext context)
     {
 
-        return AWSLambdaWrapper.Trace(tracerProvider, (_, context) =>
-        {
-            using var trace = new TraceBlock(MethodBase.GetCurrentMethod());
-            methodA();
-            methodB();
+        return await AWSLambdaWrapper.TraceAsync(tracerProvider, async (_, context) =>
+         {
+             using var trace = new TraceBlock(MethodBase.GetCurrentMethod());
+             methodA();
+             methodB();
 
-            return JsonConvert.SerializeObject(input);
-        }, input, context);
+             return JsonConvert.SerializeObject(input);
+         }, new JObject(), context);
     }
 
 
